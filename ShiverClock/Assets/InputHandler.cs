@@ -1,44 +1,14 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-enum HERO_STATE
-{
-    IDLE,
-    MOVING,
-    DASHING,
-    NO_OF_STATES
-}
-
-enum GHOST_STATE
-{
-    HUMAN,
-    GHOST
-}
-
-enum MOVE_DIRECTION
-{
-    UP = 1,
-    DOWN = 2,
-    LEFT = 4,
-    RIGHT = 8,
-    UPLEFT = UP + LEFT,
-    UPRIGHT = UP + RIGHT,
-    DOWNLEFT = DOWN + LEFT,
-    DOWNRIGHT = DOWN + RIGHT
-}
-
-struct Inputs
-{
-    public bool up;
-    public bool down;
-    public bool left;
-    public bool right;
-    public bool space;
-}
-
 public class InputHandler : MonoBehaviour
 {
-
+    public enum PlayerID
+    {
+        PlayerOne,
+        PlayerTwo
+    }
+    public PlayerID playerID = 0;
     public int moveSpeed = 1;
     private void Awake()
     {
@@ -57,9 +27,23 @@ public class InputHandler : MonoBehaviour
     void FixedUpdate()
     {
         float speed = 2.0f;
+        string horizontalInput = "";
+        switch (playerID)
+        {
+            case PlayerID.PlayerOne:
+                horizontalInput = "HorizontalOne";
+                break;
+            case PlayerID.PlayerTwo:
+                horizontalInput = "HorizontalTwo";
+                break;
+            default:
+                print("Error. wrong PlayerID. defaulting to player1");
+                horizontalInput = "HorizontalOne";
+                break;
+        }
         Vector2 newVelocity = new Vector3(0, 0);
         //newVelocity.y = Input.GetAxis("Horizontal");
-        newVelocity.x = Input.GetAxis("Horizontal");
+        newVelocity.x = Input.GetAxis(horizontalInput);
         newVelocity = newVelocity.normalized * speed;
         gameObject.GetComponent<Rigidbody2D>().velocity = newVelocity;
     }
