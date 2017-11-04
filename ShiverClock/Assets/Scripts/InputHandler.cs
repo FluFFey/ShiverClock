@@ -16,7 +16,7 @@ public class InputHandler : MonoBehaviour
     public int moveSpeed = 1;
     private IEnumerator energyBadCoroutine;
     private GameObject energyBar;
-
+    bool alive = true;
     private Rigidbody2D rb;
     private float jumpForce = 15.0f;
     private float maxHorVelocity = 5.0f;
@@ -34,9 +34,10 @@ public class InputHandler : MonoBehaviour
     private float walkSoundCooldown = 0.4f;
     public AudioClip[] walkSounds;
     private Timer walkSoundTimer;
-
+    private CapsuleCollider2D cc;
     public AudioClip timeManipErrorSound;
     public AudioClip[] fireSounds;
+    public AudioClip deathSound;
 
     private int maxEnergy = 100;
     private int energy;
@@ -49,21 +50,40 @@ public class InputHandler : MonoBehaviour
     private float localTimeModUpperLimit = 2.0f;
     private float localTimeModLowerLimit = 0.5f;
 
-    internal void setEnergySlider(GameObject slider)
-    {
-        energyBar = slider;
-        energyBar.GetComponent<Image>().fillAmount = energy / maxEnergy;
-    }
-
     private float adjustmentPrTick = 0.25f;
     private void Awake()
     {
+        cc = GetComponent<CapsuleCollider2D>();
         energy = maxEnergy;
         displayedEnergy = energy;
         energyBadCoroutine = null;
         walkSoundTimer = new Timer(walkSoundCooldown);
         sc = GetComponent<SoundCaller>();
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    internal void setEnergySlider(GameObject slider)
+    {
+        energyBar = slider;
+        energyBar.GetComponent<Image>().fillAmount = energy / maxEnergy;
+    }
+
+    public IEnumerator killPlayer()
+    {
+        if (alive)
+        {
+            rb.velocity = Vector2.zero;
+            alive = false;
+            sc.attemptSound(deathSound);
+            cc.isTrigger = true;
+            yield return new WaitForSeconds(0.2f);
+            rb.velocity = Vector2.up * 10;
+            for (float i = 0; i < 1; i += Time.deltaTime)
+            {
+                rb.velocity += Vector2.down * Time.deltaTime*20.0f;
+                yield return null;
+            }
+        }
     }
 
     // Use this for initialization
@@ -98,34 +118,20 @@ public class InputHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        //if (!Mathf.Approximately(MyGameManager.instance.timeScale, 0))
-        //{
-        //    localDt = Time.deltaTime * (1.0f / MyGameManager.instance.timeScale);
-        //}
-        //else
-        //{
-        //    localDt = Time.deltaTime * (1.0f / 0.0001f);
-        //}
-
-        if (MyGameManager.instance.timeScale == 0) //fixedupdate doesn't run when timescale == 0, so need fail-safe in update
+        if (alive)
         {
-            if (Mathf.Approximately(Input.GetAxisRaw(adjustTimeInput), 1))
+            if (MyGameManager.instance.timeScale == 0) //fixedupdate doesn't run when timescale == 0, so need fail-safe in update
             {
-                fireDown = true;
-                localTimeModifier += adjustmentPrTick;
-                timeScaleAdjustment = adjustmentPrTick;
+                if (Mathf.Approximately(Input.GetAxisRaw(adjustTimeInput), 1))
+                {
+                    fireDown = true;
+                    localTimeModifier += adjustmentPrTick;
+                    timeScaleAdjustment = adjustmentPrTick;
+                }
             }
+            MyGameManager.instance.timeScale += timeScaleAdjustment;
+            timeScaleAdjustment = 0.0f; //if it's stupid but it works, it's still stupid but it works for gamejam
         }
-        //if (Mathf.Abs(rb.velocity.x) > 0.01 && walkSoundTimer.hasEnded())
-        //{
-        //    sc.attemptSound(walkSounds[UnityEngine.Random.Range(0, walkSounds.Length)],1.0f);
-        //    walkSoundTimer.restart();
-        //}
-        MyGameManager.instance.timeScale += timeScaleAdjustment;
-        timeScaleAdjustment = 0.0f; //if it's stupid but it works, it's still stupid but it works for gamejam
-
-        
     }
 
 
@@ -156,24 +162,18 @@ public class InputHandler : MonoBehaviour
 
     void FixedUpdate()
     {
-        //if (!Mathf.Approximately(MyGameManager.instance.timeScale, 0))
-        //{
-        //    localFDtMultiplier = (1.0f / MyGameManager.instance.timeScale);
-        //}
-        //else
-        //{
-        //    localFDtMultiplier = (1.0f / 0.0001f);
-        //}
-        //localFDt = Time.fixedDeltaTime * localFDtMultiplier;
-        handleVelocity(Input.GetAxisRaw(horizontalInput));
-        checkGroundCollision();
-        if (Mathf.Approximately(Input.GetAxisRaw(jumpInput), 1) && isGrounded)
+        if(alive)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            handleVelocity(Input.GetAxisRaw(horizontalInput));
+            checkGroundCollision();
+            if (Mathf.Approximately(Input.GetAxisRaw(jumpInput), 1) && isGrounded)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            }
+            applyGravity();
+            handleFireing(Mathf.Approximately(Input.GetAxisRaw(fireInput), 1));
+            handleTimeModifications(Input.GetAxisRaw(adjustTimeInput));
         }
-        applyGravity();
-        handleFireing(Mathf.Approximately(Input.GetAxisRaw(fireInput), 1));
-        handleTimeModifications(Input.GetAxisRaw(adjustTimeInput));
     }
 
     private void checkGroundCollision()

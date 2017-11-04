@@ -29,7 +29,7 @@ GameObject:
   - component: {fileID: 82872265318641780}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -355,6 +355,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7efa0f82dd74f664db2c92a38cbe4cb4, type: 3}
   - {fileID: 8300000, guid: b1dba51cd17b72843a05d860d43947bc, type: 3}
   - {fileID: 8300000, guid: 62982873df54ead419005a03f7fdd4dd, type: 3}
+  deathSound: {fileID: 8300000, guid: 1310eac25df672149b6079945c4ece99, type: 3}
 --- !u!212 &212618561116428862
 SpriteRenderer:
   m_ObjectHideFlags: 1
