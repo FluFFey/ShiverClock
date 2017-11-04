@@ -72,6 +72,7 @@ public class InputHandler : MonoBehaviour
     {
         if (alive)
         {
+            Vector2 positionOfDeath = transform.position;
             rb.velocity = Vector2.zero;
             alive = false;
             sc.attemptSound(deathSound);
@@ -83,7 +84,23 @@ public class InputHandler : MonoBehaviour
                 rb.velocity += Vector2.down * Time.deltaTime*20.0f;
                 yield return null;
             }
+            float respawnDelay = 4.5f;
+            GameObject respawnText = new GameObject("respawnText");
+            respawnText.transform.position = positionOfDeath;
+            TextMesh rst = respawnText.AddComponent<TextMesh>(); //restartText
+            rst.anchor = TextAnchor.MiddleRight;
+            rst.characterSize = 0.3f;
+            rst.fontSize = 12;
+            for (float i = 0; i < respawnDelay; i += Time.deltaTime)
+            {
+                //rst.text = "Respawn in: " + (respawnDelay-i).ToString(".0"); //may not need text
+                yield return null;
+            }
+            //respawn
+            
+            
         }
+
     }
 
     // Use this for initialization

@@ -38,14 +38,9 @@ public class Spiketrap : MonoBehaviour
         size.y *= 0.02f;
         size.x *= 0.98f;
         RaycastHit2D boxHit = Physics2D.BoxCast(origin, size, 0, Vector2.up, 0.1f);
-        if (boxHit) //dunno if approx check is needed, but just to be safe for the jam
+        if (boxHit)
         {
-            //if (boxHit.collider.tag == "Player")
-            {
-                print("found player");
-                StartCoroutine(shootSpike(Vector2.up));
-            }
-
+            StartCoroutine(shootSpike(Vector2.up));
         }
         bc.enabled = true;
     }

@@ -76,19 +76,19 @@ public class Icicle : MonoBehaviour {
 		
 	}
 
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         respawnTimer.start();
         rb.velocity = Vector2.zero;
         gameObject.GetComponent<MeshRenderer>().enabled = false; //hacky solution for gamejam
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
-
-        //...damage player...
+        if (collision.collider.tag =="Player")
+        {
+            StartCoroutine(collision.collider.GetComponent<InputHandler>().killPlayer());
+        }
     }
 
     //void isHit fall();
-
     void fall()
     {
         rb.constraints = RigidbodyConstraints2D.FreezePositionX;
