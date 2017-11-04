@@ -14,7 +14,7 @@ public class InputHandler : MonoBehaviour
     }
     public PlayerID playerID = 0;
     public int moveSpeed = 1;
-
+    private IEnumerator energyBadCoroutine;
     private GameObject energyBar;
 
     private Rigidbody2D rb;
@@ -40,6 +40,7 @@ public class InputHandler : MonoBehaviour
 
     private int maxEnergy = 100;
     private int energy;
+    private float displayedEnergy;
     private int castCost = 10;
 
     private float timeScaleAdjustment;
@@ -51,14 +52,15 @@ public class InputHandler : MonoBehaviour
     internal void setEnergySlider(GameObject slider)
     {
         energyBar = slider;
-        energyBar.GetComponent<Slider>().value = energy / maxEnergy;
+        energyBar.GetComponent<Image>().fillAmount = energy / maxEnergy;
     }
 
     private float adjustmentPrTick = 0.25f;
     private void Awake()
     {
         energy = maxEnergy;
-
+        displayedEnergy = energy;
+        energyBadCoroutine = null;
         walkSoundTimer = new Timer(walkSoundCooldown);
         sc = GetComponent<SoundCaller>();
         rb = GetComponent<Rigidbody2D>();
@@ -130,7 +132,26 @@ public class InputHandler : MonoBehaviour
     private void modifyEnergy(int value)
     {
         energy += value;
-        energyBar.GetComponent<Slider>().value = (float)energy / maxEnergy;
+        if (energyBadCoroutine != null)
+        {
+            StopCoroutine(energyBadCoroutine);
+        }
+        energyBadCoroutine = smoothLerpEnergyBar(value);
+        StartCoroutine(energyBadCoroutine);
+        //energyBar.GetComponentsInChildren<Image>()[1].fillAmount = (float)energy / maxEnergy;
+    }
+    IEnumerator smoothLerpEnergyBar(int value)
+    {
+        float slerpTime = 0.4f;
+        for (float i = 0; i < slerpTime; i+=Time.deltaTime)
+        {
+            float pd = i / slerpTime;
+            float smooth = pd * pd * (3 - 2 * pd);
+            displayedEnergy = Mathf.Lerp(displayedEnergy, energy, smooth);
+            //float displayEnergy = energy-(value*(1.0f-smooth)) + (value * smooth);
+            energyBar.GetComponentsInChildren<Image>()[1].fillAmount = displayedEnergy / maxEnergy;
+            yield return null;
+        }
     }
 
     void FixedUpdate()
