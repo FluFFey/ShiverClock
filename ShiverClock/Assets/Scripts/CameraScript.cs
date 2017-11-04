@@ -8,14 +8,16 @@ public class CameraScript : MonoBehaviour
     public Vector2 targetOffset;
     public Color fadeColor;
     private Texture2D fadeTexture;
-    public float defaultFadeTime;
+    public bool startFaded;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
+        Color startColor = fadeColor;
+        startColor.a = startFaded ? 1 : 0;
         targetOffset = new Vector3(0, 0, 0);
         fadeTexture = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        fadeTexture.SetPixel(0, 0, fadeColor);
+        fadeTexture.SetPixel(0, 0, startColor);
         fadeTexture.Apply();
     }
 
