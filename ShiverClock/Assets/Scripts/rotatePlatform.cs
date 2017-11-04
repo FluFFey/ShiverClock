@@ -5,6 +5,7 @@ using UnityEngine;
 public class rotatePlatform : MonoBehaviour {
     public enum RotationType
     {
+        NO_ROT,
         FULL_ROT,
         HALF_ROT
     }
@@ -32,7 +33,7 @@ public class rotatePlatform : MonoBehaviour {
             case RotationType.HALF_ROT:
                 if (!Mathf.Approximately( rotationTime,0))
                 {
-                    sinVal += Time.deltaTime/ (rotationTime * 9); //not really sure about this
+                    sinVal += Time.deltaTime/ (rotationTime * 9);
                     newRot.z = Mathf.Sin(sinVal * Mathf.Rad2Deg) * 90;
                 }
                 break;

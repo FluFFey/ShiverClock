@@ -45,6 +45,7 @@ public class InputHandler : MonoBehaviour
         //newVelocity.y = Input.GetAxis("Horizontal");
         newVelocity.x = Input.GetAxis(horizontalInput);
         newVelocity = newVelocity.normalized * speed;
-        gameObject.GetComponent<Rigidbody2D>().velocity = newVelocity;
+        gameObject.GetComponent<Rigidbody2D>().AddForce(newVelocity*10);
+        //gameObject.GetComponent<Rigidbody2D>().velocity = newVelocity;
     }
 }
