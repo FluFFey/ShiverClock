@@ -154,7 +154,7 @@ Transform:
   - {fileID: 571845215}
   - {fileID: 1432352074}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &30178106
 Prefab:
@@ -381,7 +381,7 @@ GameObject:
   - component: {fileID: 333053158}
   - component: {fileID: 333053157}
   m_Layer: 0
-  m_Name: Game Controller
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -395,12 +395,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 333053156}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1a9a6ed2cb928242b6d3bdbc2310bbd, type: 3}
+  m_Script: {fileID: 11500000, guid: a1e604e6c24ddd24abe43ffd4279718b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timeScale: 1
   playerObj: {fileID: 1627812847445580, guid: 4a8f11526ee7518488f807815993fb13, type: 2}
-  numberOfPlayers: 3
+  numberOfPlayers: 2
 --- !u!4 &333053158
 Transform:
   m_ObjectHideFlags: 0
@@ -413,6 +413,49 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &374658622
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 374658624}
+  - component: {fileID: 374658623}
+  m_Layer: 0
+  m_Name: MusicManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &374658623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 374658622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 480e41de67495544bbf678f5707dae1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  songs: []
+  fanfares: []
+  volume: 0
+--- !u!4 &374658624
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 374658622}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.52, y: 3.05, z: 0}
+  m_LocalScale: {x: 5.3599997, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &438207587
 Prefab:
@@ -508,7 +551,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!61 &571845219
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -540,12 +583,12 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 571845214}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9597659b38421654983dd16d62106afe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationTime: 1.1
+  rotationTime: 1
   rotationType: 1
 --- !u!1001 &609599818
 Prefab:
@@ -677,7 +720,7 @@ ParticleSystem:
   lengthInSec: 5
   simulationSpeed: 1
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
@@ -3936,11 +3979,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 676123322}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.66, y: 14.98, z: -1.0037632}
+  m_LocalPosition: {x: 2.66, y: 14.98, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &811781520 stripped
 Transform:
@@ -4193,6 +4236,8 @@ Prefab:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 64953916530536316, guid: 204dfeb5564efce41969a5c083b18360, type: 2}
+    - {fileID: 114930546340670734, guid: 204dfeb5564efce41969a5c083b18360, type: 2}
+    - {fileID: 114926617966230114, guid: 204dfeb5564efce41969a5c083b18360, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 204dfeb5564efce41969a5c083b18360, type: 2}
   m_IsPrefabParent: 0
 --- !u!1001 &1342218851
@@ -4298,7 +4343,7 @@ Prefab:
     - target: {fileID: 50742540966722430, guid: d3b7723956363264a950786706b38bc9,
         type: 2}
       propertyPath: m_Constraints
-      value: 2
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d3b7723956363264a950786706b38bc9, type: 2}
@@ -4447,7 +4492,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1543315925
 MonoBehaviour:

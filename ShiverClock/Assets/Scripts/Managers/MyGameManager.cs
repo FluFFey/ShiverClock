@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameController : MonoBehaviour {
-
+public class MyGameManager : MonoBehaviour
+{
+    [Range(0,10)]
     public float timeScale;
-    public static GameController instance;
+    public static MyGameManager instance;
     public GameObject playerObj;
     private static GameObject[] players;
-    [Range(2,4)]
+    [Range(2, 4)]
     public int numberOfPlayers;
     private void Awake()
     {
@@ -24,7 +25,8 @@ public class GameController : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         players = new GameObject[numberOfPlayers];
         Vector3 startPosPlayer1 = new Vector3(0, 0, 0);
         Vector3 posIncrement = new Vector3(2.0f, 0, 0);
@@ -33,14 +35,14 @@ public class GameController : MonoBehaviour {
             players[i] = Instantiate(playerObj, startPosPlayer1 + posIncrement * i, Quaternion.Euler(Vector3.zero));
             players[i].GetComponent<InputHandler>().playerID = (InputHandler.PlayerID)i;
         }
-        StartCoroutine(Camera.main.GetComponent<CameraScript>().fade(true,1.0f));
+        StartCoroutine(Camera.main.GetComponent<CameraScript>().fade(true, 1.0f));
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
         Time.timeScale = timeScale;
-	}
+    }
 
     static public GameObject[] getPlayers()
     {

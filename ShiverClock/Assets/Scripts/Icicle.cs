@@ -24,6 +24,7 @@ public class Icicle : MonoBehaviour {
         if (respawnTimer.hasEnded())
         {
             rb.constraints = RigidbodyConstraints2D.FreezePositionY;
+            rb.freezeRotation = true;
             falling = false;
             respawnTimer.restart();
             respawnTimer.stop();
@@ -33,7 +34,7 @@ public class Icicle : MonoBehaviour {
         }
         if (!falling)
         {
-            foreach (GameObject player in GameController.getPlayers())
+            foreach (GameObject player in MyGameManager.getPlayers())
             {
                 if (Mathf.Abs(player.transform.position.x - transform.position.x) < 1)
                 {
@@ -58,6 +59,7 @@ public class Icicle : MonoBehaviour {
     void fall()
     {
         rb.constraints = RigidbodyConstraints2D.FreezePositionX;
+        rb.freezeRotation = true;
         falling = true;
     }
 }
