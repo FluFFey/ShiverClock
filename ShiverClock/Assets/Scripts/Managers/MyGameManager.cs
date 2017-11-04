@@ -12,6 +12,7 @@ public class MyGameManager : MonoBehaviour
     private static GameObject[] players;
     [Range(2, 4)]
     public int numberOfPlayers;
+    public GameObject[] sortedEnergyBars;
     private void Awake()
     {
         if (instance == null)
@@ -35,6 +36,7 @@ public class MyGameManager : MonoBehaviour
         {
             players[i] = Instantiate(playerObj, startPosPlayer1 + posIncrement * i, Quaternion.Euler(Vector3.zero));
             players[i].GetComponent<InputHandler>().playerID = (InputHandler.PlayerID)i;
+            players[i].GetComponent<InputHandler>().setEnergySlider(sortedEnergyBars[i]);
         }
         StartCoroutine(Camera.main.GetComponent<CameraScript>().fade(true, 1.0f));
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InputHandler : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class InputHandler : MonoBehaviour
     public PlayerID playerID = 0;
     public int moveSpeed = 1;
 
+    private GameObject energyBar;
 
     private Rigidbody2D rb;
     private float jumpForce = 15.0f;
@@ -36,17 +38,27 @@ public class InputHandler : MonoBehaviour
     public AudioClip timeManipErrorSound;
     public AudioClip[] fireSounds;
 
+    private int maxEnergy = 100;
+    private int energy;
+    private int castCost = 10;
+
     private float timeScaleAdjustment;
-    private float localDt; //local dt
-    private float localDtMultiplier;
-    private float localFDt; //local fixed dt
-    private float localFDtMultiplier;
+    
     private float localTimeModifier = 1.0f;
     private float localTimeModUpperLimit = 2.0f;
     private float localTimeModLowerLimit = 0.5f;
+
+    internal void setEnergySlider(GameObject slider)
+    {
+        energyBar = slider;
+        energyBar.GetComponent<Slider>().value = energy / maxEnergy;
+    }
+
     private float adjustmentPrTick = 0.25f;
     private void Awake()
     {
+        energy = maxEnergy;
+
         walkSoundTimer = new Timer(walkSoundCooldown);
         sc = GetComponent<SoundCaller>();
         rb = GetComponent<Rigidbody2D>();
@@ -112,6 +124,13 @@ public class InputHandler : MonoBehaviour
         timeScaleAdjustment = 0.0f; //if it's stupid but it works, it's still stupid but it works for gamejam
 
         
+    }
+
+
+    private void modifyEnergy(int value)
+    {
+        energy += value;
+        energyBar.GetComponent<Slider>().value = (float)energy / maxEnergy;
     }
 
     void FixedUpdate()
@@ -182,15 +201,18 @@ public class InputHandler : MonoBehaviour
             if (adjustTimeDown == false)
             {
                 adjustTimeDown = true;
-                if (!Mathf.Approximately(localTimeModifier, localTimeModLowerLimit) && input < 0)
+                if (!Mathf.Approximately(localTimeModifier, localTimeModLowerLimit) && input < 0 && energy >= castCost)
                 {
+
                     localTimeModifier -= adjustmentPrTick;
                     timeScaleAdjustment = -adjustmentPrTick;
+                    modifyEnergy(-castCost);
                 }
-                else if (!Mathf.Approximately(localTimeModifier, localTimeModUpperLimit) && input > 0) //too ugly?
+                else if (!Mathf.Approximately(localTimeModifier, localTimeModUpperLimit) && input > 0 && energy >= castCost) //too ugly?
                 {
                     localTimeModifier += adjustmentPrTick;
                     timeScaleAdjustment = adjustmentPrTick;
+                    modifyEnergy(-castCost);
                 }
                 else
                 {

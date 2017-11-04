@@ -25,24 +25,36 @@ public class Icicle : MonoBehaviour {
         if (falling)
         {
             rb.velocity += Vector2.down * Time.fixedDeltaTime * MyGameManager.instance.timeScale* MyGameManager.instance.defaultGravity;
-        }
-        
+        }   
     }
 
+    IEnumerator respawnIcicle()
+    {
+        rb.velocity = Vector2.zero;
+        rb.constraints = RigidbodyConstraints2D.FreezePositionY;
+        rb.freezeRotation = true;
+        falling = false;
+        float rescaleTime = 0.6f;
+        Vector3 normalScale = transform.localScale;
+        transform.localScale = Vector3.zero;
+        for (float i = 0; i < rescaleTime; i += Time.deltaTime * MyGameManager.instance.timeScale)
+        {
+            transform.localScale = (i / rescaleTime) * normalScale;
+            yield return null;
+        }
+        respawnTimer.restart();
+        respawnTimer.stop();
+        gameObject.GetComponent<MeshRenderer>().enabled = true;
+        gameObject.GetComponent<BoxCollider2D>().enabled = true;
+        transform.position = spawnPos;
+    }
     // Update is called once per frame
     void Update ()
     {
         if (respawnTimer.hasEnded())
         {
-            rb.velocity = Vector2.zero;
-            rb.constraints = RigidbodyConstraints2D.FreezePositionY;
-            rb.freezeRotation = true;
-            falling = false;
-            respawnTimer.restart();
-            respawnTimer.stop();
-            gameObject.GetComponent<MeshRenderer>().enabled = true;
-            gameObject.GetComponent<BoxCollider2D>().enabled = true;
-            transform.position = spawnPos;
+            StartCoroutine(respawnIcicle());
+            
         }
         if (falling)
         {
