@@ -148,7 +148,7 @@ public class InputHandler : MonoBehaviour
             float pd = i / slerpTime;
             float smooth = pd * pd * (3 - 2 * pd);
             displayedEnergy = Mathf.Lerp(displayedEnergy, energy, smooth);
-            //float displayEnergy = energy-(value*(1.0f-smooth)) + (value * smooth);
+            float displayEnergy = displayedEnergy-(value*(1.0f-smooth)) + (value * smooth);
             energyBar.GetComponentsInChildren<Image>()[1].fillAmount = displayedEnergy / maxEnergy;
             yield return null;
         }
