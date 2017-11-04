@@ -37,7 +37,7 @@ public class MovingPlatform : MonoBehaviour
     {
         if (!Mathf.Approximately(moveTime, 0))
         {
-            sinVal += Time.fixedDeltaTime / (moveTime * 9); //not really sure about this
+            sinVal += Time.fixedDeltaTime*MyGameManager.instance.timeScale / (moveTime * 9); //not really sure about this
             rb.MovePosition(startPos+ moveDirection * Mathf.Sin(sinVal * Mathf.Rad2Deg) * moveLength);
         }
     }

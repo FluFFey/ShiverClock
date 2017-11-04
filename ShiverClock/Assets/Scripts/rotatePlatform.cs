@@ -28,13 +28,13 @@ public class rotatePlatform : MonoBehaviour {
             case RotationType.FULL_ROT:
                 if (!Mathf.Approximately(rotationTime, 0))
                 {
-                    newAngle += (Time.deltaTime * 360.0f) / (rotationTime);
+                    newAngle += (Time.deltaTime * MyGameManager.instance.timeScale * 360.0f) / (rotationTime);
                 }
                 break;
             case RotationType.HALF_ROT:
                 if (!Mathf.Approximately( rotationTime,0))
                 {
-                    sinVal += Time.deltaTime/ (rotationTime * 9);
+                    sinVal += (Time.deltaTime * MyGameManager.instance.timeScale) / (rotationTime * 9);
                     newAngle = Mathf.Sin(sinVal * Mathf.Rad2Deg) * 90;
                 }
                 break;

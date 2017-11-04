@@ -8,6 +8,7 @@ public class MyGameManager : MonoBehaviour
     public float timeScale;
     public static MyGameManager instance;
     public GameObject playerObj;
+    public float defaultGravity;
     private static GameObject[] players;
     [Range(2, 4)]
     public int numberOfPlayers;
@@ -41,7 +42,7 @@ public class MyGameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Time.timeScale = timeScale;
+        //Time.timeScale = timeScale;
     }
 
     static public GameObject[] getPlayers()

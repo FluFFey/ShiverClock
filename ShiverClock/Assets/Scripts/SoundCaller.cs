@@ -70,7 +70,7 @@ public class SoundCaller : MonoBehaviour
         AudioSource source = findFreeAudioSource();
         if (source != default(AudioSource)) //found available source
         {
-            source.pitch = Random.Range(1 - pitchRange, 1 + 1 + pitchRange);
+            source.pitch = Random.Range(1.0f - pitchRange*0.01f, 1.0f + pitchRange * 0.01f);
             source.clip = clip;
             source.Play();
             return true;

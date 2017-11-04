@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Icicle : MonoBehaviour {
 
-    public float respawnTime;
+    public float defaultRespawnTime;
+    private float modifiedRespawnTime;
     private Timer respawnTimer;
     private Vector3 spawnPos;
     private Rigidbody2D rb;
@@ -15,14 +16,25 @@ public class Icicle : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezePositionY;
         rb.freezeRotation = true;
-        respawnTimer = new Timer(respawnTime,false);
+        respawnTimer = new Timer(defaultRespawnTime,false);
+        modifiedRespawnTime = defaultRespawnTime;
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    private void FixedUpdate()
+    {
+        if (falling)
+        {
+            rb.velocity += Vector2.down * Time.fixedDeltaTime * MyGameManager.instance.timeScale* MyGameManager.instance.defaultGravity;
+        }
+        
+    }
+
+    // Update is called once per frame
+    void Update ()
     {
         if (respawnTimer.hasEnded())
         {
+            rb.velocity = Vector2.zero;
             rb.constraints = RigidbodyConstraints2D.FreezePositionY;
             rb.freezeRotation = true;
             falling = false;
@@ -31,6 +43,13 @@ public class Icicle : MonoBehaviour {
             gameObject.GetComponent<MeshRenderer>().enabled = true;
             gameObject.GetComponent<BoxCollider2D>().enabled = true;
             transform.position = spawnPos;
+        }
+        if (falling)
+        {
+            //print(modifiedRespawnTime);
+            //modifiedRespawnTime += modifiedRespawnTime * (1.0f / MyGameManager.instance.timeScale) * Time.deltaTime - modifiedRespawnTime*Time.deltaTime; //should work I guess?? note: does not work. don't know 
+            //print(modifiedRespawnTime);
+            respawnTimer.setDuration(modifiedRespawnTime);
         }
         if (!falling)
         {
@@ -49,8 +68,10 @@ public class Icicle : MonoBehaviour {
     private void OnCollisionEnter2D(Collision2D collision)
     {
         respawnTimer.start();
+        rb.velocity = Vector2.zero;
         gameObject.GetComponent<MeshRenderer>().enabled = false; //hacky solution for gamejam
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
+
         //...damage player...
     }
 
