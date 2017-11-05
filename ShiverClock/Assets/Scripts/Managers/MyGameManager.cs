@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor.Animations;
 public class MyGameManager : MonoBehaviour
 {
     [Range(0,10)]
@@ -14,6 +15,8 @@ public class MyGameManager : MonoBehaviour
     [Range(2, 4)]
     public int numberOfPlayers;
     public GameObject[] sortedEnergyBars;
+    public GameObject[] sortedLifeRemainderTexts;
+    public AnimatorController[] sortedAnimatorControllers;
     public float roundDuration; //time a round takes
     private float remainingTime; //in seconds
     public GameObject HUDClock;
@@ -42,6 +45,8 @@ public class MyGameManager : MonoBehaviour
             players[i] = Instantiate(playerObj, startPosPlayer1 + posIncrement * i, Quaternion.Euler(Vector3.zero));
             players[i].GetComponent<InputHandler>().playerID = (InputHandler.PlayerID)i;
             players[i].GetComponent<InputHandler>().setEnergySlider(sortedEnergyBars[i]);
+            players[i].GetComponent<InputHandler>().setLifeCounterText(sortedLifeRemainderTexts[i]);
+            players[i].GetComponent<Animator>().runtimeAnimatorController = sortedAnimatorControllers[i];
         }
         StartCoroutine(Camera.main.GetComponent<CameraScript>().fade(true, 1.0f));
     }

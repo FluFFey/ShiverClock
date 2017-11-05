@@ -27,6 +27,8 @@ GameObject:
   - component: {fileID: 82580687867285166}
   - component: {fileID: 82752675151483938}
   - component: {fileID: 82872265318641780}
+  - component: {fileID: 95962412140317370}
+  - component: {fileID: 114516268817980654}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -322,6 +324,34 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!95 &95962412140317370
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1627812847445580}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114516268817980654
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1627812847445580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0f285e131eb028499af4866acf96b9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114608057298140090
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -346,7 +376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerID: 1
   moveSpeed: 1
-  xVel: 0
+  remainingLives: 3
   walkSounds:
   - {fileID: 8300000, guid: edbdc372b7a07d94da0da5e8bd3bd4db, type: 3}
   - {fileID: 8300000, guid: 8eae13ce4d480ca4ea2dbf0af78cf7df, type: 3}
@@ -356,7 +386,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b1dba51cd17b72843a05d860d43947bc, type: 3}
   - {fileID: 8300000, guid: 62982873df54ead419005a03f7fdd4dd, type: 3}
   deathSound: {fileID: 8300000, guid: 1310eac25df672149b6079945c4ece99, type: 3}
-  snowballCooldown: 0.4
+  snowBallSpeed: 6
+  invulTime: 2.5
+  snowballCooldown: 0.5
   snowballObject: {fileID: 1906807260448528, guid: 0d82173127210ca4bb072ad3476bb3bb,
     type: 2}
 --- !u!212 &212618561116428862

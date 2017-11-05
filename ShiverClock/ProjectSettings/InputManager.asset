@@ -45,7 +45,7 @@ InputManager:
     positiveButton: 
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 1000
+    gravity: 0
     dead: 0.001
     sensitivity: 1000
     snap: 1
@@ -61,7 +61,7 @@ InputManager:
     positiveButton: 0
     altNegativeButton: 
     altPositiveButton: joystick 1 button 0
-    gravity: 1000
+    gravity: 0
     dead: 0.001
     sensitivity: 1000
     snap: 0

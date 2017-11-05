@@ -58,5 +58,11 @@ MonoBehaviour:
   sortedEnergyBars:
   - {fileID: 0}
   - {fileID: 0}
+  sortedLifeRemainderTexts:
+  - {fileID: 0}
+  - {fileID: 0}
+  sortedAnimatorControllers:
+  - {fileID: 9100000, guid: 5a1c906b46302924ba0bad64f23a87b4, type: 2}
+  - {fileID: 9100000, guid: 9191737619ae8754d8ae1d4db8199f87, type: 2}
   roundDuration: 120
   HUDClock: {fileID: 0}
