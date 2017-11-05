@@ -35,6 +35,7 @@ public class InputHandler : MonoBehaviour
     bool adjustTimeDown = false;
     bool fireDown = false;
     bool isGrounded = false;
+    bool isJumping = false;
     private float xVel;
     private SoundCaller sc;
     private float walkSoundCooldown = 0.4f;
@@ -134,6 +135,7 @@ public class InputHandler : MonoBehaviour
             if (Mathf.Approximately(Input.GetAxisRaw(jumpInput), 1) && isGrounded)
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                isJumping = true;
             }
             applyGravity();
             handleFireing(Mathf.Approximately(Input.GetAxisRaw(fireInput), 1));
@@ -300,7 +302,21 @@ public class InputHandler : MonoBehaviour
     //only call during fixedUpdate
     private void applyGravity()
     {
-        rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - customGravity*Time.fixedDeltaTime);//*localFDt);
+        if(!isGrounded){
+            if(isJumping && !Mathf.Approximately(Input.GetAxisRaw(jumpInput), 1) && rb.velocity.y > 0.0f)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - customGravity*Time.fixedDeltaTime * 2.0f);
+            }
+            else if(isJumping && rb.velocity.y <= 0)
+            {
+                isJumping = false;
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - customGravity*Time.fixedDeltaTime);//*localFDt);
+            }
+            else
+            {
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - customGravity*Time.fixedDeltaTime);//*localFDt);
+            }
+        }
     }
 
     private void handleTimeModifications(float input)
