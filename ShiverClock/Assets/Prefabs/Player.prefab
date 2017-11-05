@@ -356,6 +356,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b1dba51cd17b72843a05d860d43947bc, type: 3}
   - {fileID: 8300000, guid: 62982873df54ead419005a03f7fdd4dd, type: 3}
   deathSound: {fileID: 8300000, guid: 1310eac25df672149b6079945c4ece99, type: 3}
+  snowballCooldown: 0.4
+  snowballObject: {fileID: 1906807260448528, guid: 0d82173127210ca4bb072ad3476bb3bb,
+    type: 2}
 --- !u!212 &212618561116428862
 SpriteRenderer:
   m_ObjectHideFlags: 1

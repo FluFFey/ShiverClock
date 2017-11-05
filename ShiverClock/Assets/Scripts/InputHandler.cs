@@ -16,7 +16,10 @@ public class InputHandler : MonoBehaviour
     public int moveSpeed = 1;
     private IEnumerator energyBadCoroutine;
     private GameObject energyBar;
+
     bool alive = true;
+    bool disabled = false;
+
     private Rigidbody2D rb;
     private float jumpForce = 15.0f;
     private float maxHorVelocity = 5.0f;
@@ -38,7 +41,7 @@ public class InputHandler : MonoBehaviour
     public AudioClip timeManipErrorSound;
     public AudioClip[] fireSounds;
     public AudioClip deathSound;
-
+    public float snowBallSpeed;
     private int maxEnergy = 100;
     private int energy;
     private float displayedEnergy;
@@ -51,8 +54,14 @@ public class InputHandler : MonoBehaviour
     private float localTimeModLowerLimit = 0.5f;
 
     private float adjustmentPrTick = 0.25f;
+
+    public float snowballCooldown;
+    private Timer snowballTimer;
+    public GameObject snowballObject;
+
     private void Awake()
     {
+        snowballTimer = new Timer(snowballCooldown);
         cc = GetComponent<CapsuleCollider2D>();
         energy = maxEnergy;
         displayedEnergy = energy;
@@ -60,6 +69,22 @@ public class InputHandler : MonoBehaviour
         walkSoundTimer = new Timer(walkSoundCooldown);
         sc = GetComponent<SoundCaller>();
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    public void getKnockedBack(Vector2 knockbackVelocity)
+    {
+        StartCoroutine(getKnockedBackRoutine(knockbackVelocity));
+    }
+    public IEnumerator getKnockedBackRoutine(Vector2 knockbackVelocity)
+    {
+        disabled = true;
+        rb.velocity += knockbackVelocity;
+        Color hitColor = new Color(0.8f, 0.1f, 0);
+        GetComponent<SpriteRenderer>().color = hitColor;
+        yield return new WaitForSeconds(0.5f);
+        disabled = false;
+        hitColor = new Color(1, 1, 1);
+        GetComponent<SpriteRenderer>().color = hitColor;
     }
 
     internal void setEnergySlider(GameObject slider)
@@ -97,8 +122,6 @@ public class InputHandler : MonoBehaviour
                 yield return null;
             }
             //respawn
-            
-            
         }
 
     }
@@ -135,7 +158,7 @@ public class InputHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (alive)
+        if (alive && !disabled)
         {
             if (MyGameManager.instance.timeScale == 0) //fixedupdate doesn't run when timescale == 0, so need fail-safe in update
             {
@@ -179,7 +202,7 @@ public class InputHandler : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(alive)
+        if(alive && !disabled)
         {
             handleVelocity(Input.GetAxisRaw(horizontalInput));
             checkGroundCollision();
@@ -189,7 +212,7 @@ public class InputHandler : MonoBehaviour
             }
             applyGravity();
             handleFireing(Mathf.Approximately(Input.GetAxisRaw(fireInput), 1));
-            handleTimeModifications(Input.GetAxisRaw(adjustTimeInput));
+            handleTimeModifications(Input.GetAxisRaw(adjustTimeInput)/Input.GetAxisRaw(adjustTimeInput));
         }
     }
 
@@ -258,7 +281,6 @@ public class InputHandler : MonoBehaviour
                     //play error sound, maybe animation
                 }
             }
-
         }
         else
         {
@@ -268,15 +290,51 @@ public class InputHandler : MonoBehaviour
 
     private void handleFireing(bool isFireing)
     {
-        if (isFireing)
+        if (isFireing && snowballTimer.hasEnded())
         {
+            snowballTimer.restart();
             if (fireDown == false)
             {
                 fireDown = true;
             }
             sc.attemptSound(fireSounds[UnityEngine.Random.Range(0, fireSounds.Length)], 5.0f);
 
-            //fire...
+            GameObject snowball = Instantiate(snowballObject);
+            snowball.GetComponent<SnowballScript>().setThrower(gameObject);
+            Vector2 shootDirection;
+            shootDirection.x = Input.GetAxis("ShootAxisXOne");
+            shootDirection.y = -Input.GetAxis("ShootAxisYOne");
+            print(shootDirection);
+            shootDirection.Normalize();
+            Vector2 finaldirection = Vector2.zero;
+            float threshold = 0.097f;
+            if (shootDirection.x > threshold)
+            {
+                finaldirection.x = 1.0f;
+            }
+            if (shootDirection.x < -threshold)
+            {
+                finaldirection.x = -1.0f;
+            }
+            if (shootDirection.y > threshold)
+            {
+                finaldirection.y = 1.0f;
+            }
+            if (shootDirection.y < -threshold)
+            {
+                finaldirection.y = -1.0f;
+            }
+            if (finaldirection.x ==0 && finaldirection.y == 0)
+            {
+                finaldirection = Vector2.right;
+            }
+            else
+            {
+                finaldirection.Normalize();
+            }
+
+            snowball.transform.position = (Vector2)transform.position + finaldirection * 0.5f;
+            snowball.GetComponent<Rigidbody2D>().velocity = snowBallSpeed*finaldirection;
         }
         else
         {
