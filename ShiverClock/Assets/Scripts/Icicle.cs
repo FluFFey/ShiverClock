@@ -69,12 +69,17 @@ public class Icicle : MonoBehaviour {
             {
                 if (Mathf.Abs(player.transform.position.x - transform.position.x) < 1)
                 {
-                    fall();
+                   // fall();
                 }
             }
         }
 		
 	}
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        fall();
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -82,10 +87,10 @@ public class Icicle : MonoBehaviour {
         rb.velocity = Vector2.zero;
         gameObject.GetComponent<MeshRenderer>().enabled = false; //hacky solution for gamejam
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
-        if (collision.collider.tag =="Player")
+        if (collision.collider.tag == "Player")
         {
             StartCoroutine(collision.collider.GetComponent<InputHandler>().killPlayer());
-        }
+        }        
     }
 
     //void isHit fall();

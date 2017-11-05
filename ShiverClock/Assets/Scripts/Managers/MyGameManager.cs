@@ -21,7 +21,12 @@ public class MyGameManager : MonoBehaviour
     public float roundDuration; //time a round takes
     private float remainingTime; //in seconds
     public GameObject HUDClock;
-    
+
+    public GameObject rechargeEnergyObj;
+    private Timer energyRechargeTimer;
+    public float energyRechargeTime;
+    public float timeBeforeFirstBattery;
+
     private void Awake()
     {
         if (instance == null)
@@ -32,7 +37,8 @@ public class MyGameManager : MonoBehaviour
         {
             DestroyObject(gameObject);
         }
-        DontDestroyOnLoad(this);
+        //DontDestroyOnLoad(this);
+        energyRechargeTimer = new Timer(timeBeforeFirstBattery);
     }
 
     // Use this for initialization
@@ -57,11 +63,19 @@ public class MyGameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         remainingTime -= Time.deltaTime * timeScale;
         int minutes = (int)remainingTime / 60;
         int seconds = (int)(remainingTime % 60);
         string timeString = minutes.ToString() + " : " + seconds.ToString();
         HUDClock.GetComponent<UnityEngine.UI.Text>().text = timeString;
+        if (energyRechargeTimer.hasEnded())
+        {
+            energyRechargeTimer.setDuration(energyRechargeTime);
+            energyRechargeTimer.restart();
+            GameObject rechargeObj = Instantiate(rechargeEnergyObj);
+            rechargeObj.transform.position = spawnPositions[Random.Range(0, spawnPositions.Length)].transform.position;
+        }
     }
 
     static public GameObject[] getPlayers()

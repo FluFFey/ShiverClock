@@ -32,6 +32,8 @@ public class InputHandler : MonoBehaviour
     private string jumpInput = "";
     private string adjustTimeInput = "";
     private string fireInput = "";
+    private string shootXAxis = "";
+    private string shootYAxis = "";
     bool adjustTimeDown = false;
     bool fireDown = false;
     bool isGrounded = false;
@@ -87,12 +89,16 @@ public class InputHandler : MonoBehaviour
                 jumpInput = "JumpOne";
                 adjustTimeInput = "AdjustTimeOne";
                 fireInput = "FireOne";
+                shootXAxis = "ShootAxisXOne";
+                shootYAxis = "ShootAxisYOne";
                 break;
             case PlayerID.PlayerTwo:
                 horizontalInput = "HorizontalTwo";
                 jumpInput = "JumpTwo";
                 adjustTimeInput = "AdjustTimeTwo";
                 fireInput = "FireTwo";
+                shootXAxis = "ShootAxisXTwo";
+                shootYAxis = "ShootAxisYTwo";
                 break;
             case PlayerID.PlayerThree:
             case PlayerID.PlayerFour:
@@ -102,6 +108,8 @@ public class InputHandler : MonoBehaviour
                 jumpInput = "JumpOne";
                 adjustTimeInput = "AdjustTimeOne";
                 fireInput = "FireOne";
+                shootXAxis = "ShootAxisXOne";
+                shootYAxis = "ShootAxisYOne";
                 break;
         }
         StartCoroutine(getInvulnerable());
@@ -241,7 +249,7 @@ public class InputHandler : MonoBehaviour
     }
 
 
-    private void modifyEnergy(int value)
+    public void modifyEnergy(int value)
     {
         energy += value;
         if (energyBadCoroutine != null)
@@ -372,8 +380,8 @@ public class InputHandler : MonoBehaviour
             GameObject snowball = Instantiate(snowballObject);
             snowball.GetComponent<SnowballScript>().setThrower(gameObject);
             Vector2 shootDirection;
-            shootDirection.x = Input.GetAxis("ShootAxisXOne");
-            shootDirection.y = -Input.GetAxis("ShootAxisYOne");
+            shootDirection.x = Input.GetAxis(shootXAxis);
+            shootDirection.y = -Input.GetAxis(shootYAxis);
             shootDirection.Normalize();
             Vector2 finaldirection = Vector2.zero;
             float threshold = 0.50f;
