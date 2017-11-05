@@ -35,3 +35,8 @@ sysinfo.txt
 ShiverClock/Library/metadata/
 ShiverClock/Temp/
 ShiverClock/Library/ShaderCache/
+*.meta
+ShiverClock/Library/ScriptAssemblies/
+ShiverClock/Library/UnityAssemblies/
+ShiverClock/Library/EditorInstance.json
+ShiverClock/Library/assetDatabase3
