@@ -43,15 +43,14 @@ public class SnowballScript : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (Time.time - spawntime > 0.05f)
-        {
+        //if (Time.time - spawntime > 0.01f)
+       // {
             if (collision.tag == "Player" && (throwerObject != collision.gameObject))
             {
-                print(collision.gameObject.name);
                 collision.gameObject.GetComponent<InputHandler>().getKnockedBack(rb.velocity*0.8f);
             }
             Destroy(gameObject);
-        }
+        //}
         
     }
 }

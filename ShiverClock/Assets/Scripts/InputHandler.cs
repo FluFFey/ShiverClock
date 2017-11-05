@@ -59,8 +59,6 @@ public class InputHandler : MonoBehaviour
 
     private float adjustmentPrTick = 0.25f;
 
-
-
     public float snowballCooldown;
     private Timer snowballTimer;
     public GameObject snowballObject;
@@ -78,7 +76,7 @@ public class InputHandler : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Use this for initialization
+    //Use this for initialization
     void Start()
     {
         switch (playerID)
@@ -98,7 +96,7 @@ public class InputHandler : MonoBehaviour
             case PlayerID.PlayerThree:
             case PlayerID.PlayerFour:
             default:
-                //print("Error. wrong PlayerID. defaulting to player1");
+                print("Error. wrong PlayerID. defaulting to player1");
                 horizontalInput = "HorizontalOne";
                 jumpInput = "JumpOne";
                 adjustTimeInput = "AdjustTimeOne";
@@ -139,7 +137,7 @@ public class InputHandler : MonoBehaviour
             }
             applyGravity();
             handleFireing(Mathf.Approximately(Input.GetAxisRaw(fireInput), 1));
-            handleTimeModifications(Input.GetAxisRaw(adjustTimeInput) / Input.GetAxisRaw(adjustTimeInput));
+            handleTimeModifications(Input.GetAxis(adjustTimeInput));
         }
     }
 
@@ -175,13 +173,14 @@ public class InputHandler : MonoBehaviour
     public IEnumerator getKnockedBackRoutine(Vector2 knockbackVelocity)
     {
         disabled = true;
+        GetComponent<PlayerAnimationHandler>().setHurt();
         rb.velocity += knockbackVelocity;
-        Color hitColor = new Color(0.8f, 0.1f, 0);
-        GetComponent<SpriteRenderer>().color = hitColor;
+        //Color hitColor = new Color(0.8f, 0.1f, 0);
+        //GetComponent<SpriteRenderer>().color = hitColor;
         yield return new WaitForSeconds(0.5f);
         disabled = false;
-        hitColor = new Color(1, 1, 1);
-        GetComponent<SpriteRenderer>().color = hitColor;
+        //hitColor = new Color(1, 1, 1);
+        //GetComponent<SpriteRenderer>().color = hitColor;
     }
 
     internal void setEnergySlider(GameObject slider)
@@ -194,6 +193,7 @@ public class InputHandler : MonoBehaviour
     {
         if (alive && invulTimer.hasEnded())
         {
+            GetComponent<PlayerAnimationHandler>().setHurt();
             remainingLives--;
             lifeRemainderText.GetComponent<Text>().text = "Lives: " + remainingLives.ToString();
             if (remainingLives == 0)
@@ -223,7 +223,7 @@ public class InputHandler : MonoBehaviour
                 rst.fontSize = 12;
                 for (float i = 0; i < respawnDelay; i += Time.deltaTime)
                 {
-                    rst.text = "Respawn in: " + (respawnDelay - i).ToString(".0"); //may not need text
+                    rst.text = "Respawn in: " + (respawnDelay - i).ToString("0."); //may not need text
                     yield return null;
                 }
                 Destroy(respawnText);
@@ -305,19 +305,20 @@ public class InputHandler : MonoBehaviour
 
     private void handleTimeModifications(float input)
     {
-        if (!Mathf.Approximately(input, 0))
+
+        if (input > 0.5f || input < -0.5f)
         {
             if (adjustTimeDown == false)
             {
                 adjustTimeDown = true;
-                if (!Mathf.Approximately(localTimeModifier, localTimeModLowerLimit) && input < 0 && energy >= castCost)
+                if (!Mathf.Approximately(localTimeModifier, localTimeModLowerLimit) && input > 0 && energy >= castCost) //input > 0 IS FLIPPED BECAUSE OF CONTROLLER. REMEMBER THIS
                 {
 
                     localTimeModifier -= adjustmentPrTick;
                     timeScaleAdjustment = -adjustmentPrTick;
                     modifyEnergy(-castCost);
                 }
-                else if (!Mathf.Approximately(localTimeModifier, localTimeModUpperLimit) && input > 0 && energy >= castCost) //too ugly?
+                else if (!Mathf.Approximately(localTimeModifier, localTimeModUpperLimit) && input < 0 && energy >= castCost) //input < 0 IS FLIPPED BECAUSE OF CONTROLLER. REMEMBER THIS
                 {
                     localTimeModifier += adjustmentPrTick;
                     timeScaleAdjustment = adjustmentPrTick;
@@ -340,6 +341,7 @@ public class InputHandler : MonoBehaviour
     {
         if (isFireing && snowballTimer.hasEnded())
         {
+            GetComponent<PlayerAnimationHandler>().setThrowingBall();
             snowballTimer.restart();
             if (fireDown == false)
             {
@@ -352,10 +354,9 @@ public class InputHandler : MonoBehaviour
             Vector2 shootDirection;
             shootDirection.x = Input.GetAxis("ShootAxisXOne");
             shootDirection.y = -Input.GetAxis("ShootAxisYOne");
-            print(shootDirection);
             shootDirection.Normalize();
             Vector2 finaldirection = Vector2.zero;
-            float threshold = 0.097f;
+            float threshold = 0.50f;
             if (shootDirection.x > threshold)
             {
                 finaldirection.x = 1.0f;
@@ -381,7 +382,7 @@ public class InputHandler : MonoBehaviour
                 finaldirection.Normalize();
             }
 
-            snowball.transform.position = (Vector2)transform.position + finaldirection * 0.5f;
+            snowball.transform.position = (Vector2)transform.position + finaldirection * 0.75f;
             snowball.GetComponent<Rigidbody2D>().velocity = snowBallSpeed*finaldirection;
         }
         else

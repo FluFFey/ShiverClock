@@ -18,12 +18,12 @@ public class PlayerAnimationHandler : MonoBehaviour {
         ih = GetComponent<InputHandler>();
     }
 	
-    public void setThrowingBall(bool isThrowing)
+    public void setThrowingBall()
     {
         animator.SetTrigger("throwingBall");
     }
 
-    public void setHurt(bool isHurt)
+    public void setHurt()
     {
         animator.SetTrigger("isHurt");
     }
@@ -31,7 +31,6 @@ public class PlayerAnimationHandler : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         animator.SetFloat("velocity", Mathf.Abs(rb.velocity.x));
-        print(Mathf.Abs(rb.velocity.x));
         animator.SetBool("isGrounded", ih.getGrounded());
         if (rb.velocity.x < 0.01)
         {
