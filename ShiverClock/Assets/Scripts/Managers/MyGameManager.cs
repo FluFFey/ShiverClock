@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor.Animations;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
+
 public class MyGameManager : MonoBehaviour
 {
     [Range(0,10)]
@@ -21,7 +24,7 @@ public class MyGameManager : MonoBehaviour
     public float roundDuration; //time a round takes
     private float remainingTime; //in seconds
     public GameObject HUDClock;
-
+    public GameObject winnerText;
     public GameObject rechargeEnergyObj;
     private Timer energyRechargeTimer;
     public float energyRechargeTime;
@@ -76,6 +79,17 @@ public class MyGameManager : MonoBehaviour
             GameObject rechargeObj = Instantiate(rechargeEnergyObj);
             rechargeObj.transform.position = spawnPositions[Random.Range(0, spawnPositions.Length)].transform.position;
         }
+    }
+
+    public void setVictor(int playerNo)
+    {
+        winnerText.GetComponent<Text>().text = "Player " + playerNo.ToString() + "won!";
+        StartCoroutine(restartGame());
+    }
+    IEnumerator restartGame()
+    {
+        yield return new WaitForSeconds(5.0f);
+        SceneManager.LoadScene("Start");
     }
 
     static public GameObject[] getPlayers()

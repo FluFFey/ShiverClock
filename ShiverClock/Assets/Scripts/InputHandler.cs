@@ -205,25 +205,21 @@ public class InputHandler : MonoBehaviour
         {
             GetComponent<PlayerAnimationHandler>().setHurt();
             remainingLives--;
-            lifeRemainderText.GetComponent<Text>().text = "Lives: " + remainingLives.ToString();
-            if (remainingLives == 0)
+            lifeRemainderText.GetComponent<Text>().text = "Lives: " + remainingLives.ToString();         
+            Vector2 positionOfDeath = (Vector2)transform.position+Vector2.up*0.5f;
+            rb.velocity = Vector2.zero;
+            alive = false;
+            sc.attemptSound(deathSound);
+            cc.isTrigger = true;
+            yield return new WaitForSeconds(0.2f);
+            rb.velocity = Vector2.up * 10;
+            for (float i = 0; i < 1; i += Time.deltaTime)
             {
-
+                rb.velocity += Vector2.down * Time.deltaTime * 20.0f;
+                yield return null;
             }
-            else
+            if (remainingLives != 0)
             {
-                Vector2 positionOfDeath = (Vector2)transform.position+Vector2.up*0.5f;
-                rb.velocity = Vector2.zero;
-                alive = false;
-                sc.attemptSound(deathSound);
-                cc.isTrigger = true;
-                yield return new WaitForSeconds(0.2f);
-                rb.velocity = Vector2.up * 10;
-                for (float i = 0; i < 1; i += Time.deltaTime)
-                {
-                    rb.velocity += Vector2.down * Time.deltaTime * 20.0f;
-                    yield return null;
-                }
                 float respawnDelay = 4.5f;
                 GameObject respawnText = new GameObject("respawnText");
                 respawnText.transform.position = positionOfDeath;
@@ -240,10 +236,23 @@ public class InputHandler : MonoBehaviour
                 //respawn
                 alive = true;
                 cc.isTrigger = false;
+
                 transform.position = MyGameManager.instance.getSpawnPos();
                 StartCoroutine(getInvulnerable());
                 rb.velocity = Vector2.zero;
-            }            
+            }
+            else
+            {
+                if (playerID == PlayerID.PlayerOne)
+                {
+                    MyGameManager.instance.setVictor(2);
+                }
+                if (playerID == PlayerID.PlayerTwo)
+                {
+                    MyGameManager.instance.setVictor(1);
+                }
+
+            }
         }
 
     }

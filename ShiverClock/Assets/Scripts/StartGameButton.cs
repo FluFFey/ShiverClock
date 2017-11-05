@@ -13,7 +13,7 @@ public class StartGameButton : MonoBehaviour {
 	void Update () {
         if (Input.anyKey)
         {
-            SceneManager.LoadScene("Arena1");
+            SceneManager.LoadScene("Arena");
         }
 
     }
