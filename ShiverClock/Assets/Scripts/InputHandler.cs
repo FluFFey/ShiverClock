@@ -205,7 +205,7 @@ public class InputHandler : MonoBehaviour
                 Vector2 positionOfDeath = (Vector2)transform.position+Vector2.up*0.5f;
                 rb.velocity = Vector2.zero;
                 alive = false;
-                sc.attemptSound(deathSound);
+                SoundEffectManager.instance.attemptSound(deathSound);
                 cc.isTrigger = true;
                 yield return new WaitForSeconds(0.2f);
                 rb.velocity = Vector2.up * 10;
@@ -291,7 +291,7 @@ public class InputHandler : MonoBehaviour
         rb.velocity = newVelocity;
         if (!Mathf.Approximately(input,0) && walkSoundTimer.hasEnded() && isGrounded) //strange place, for walksound, but isok
         {
-            sc.attemptSound(walkSounds[UnityEngine.Random.Range(0, walkSounds.Length)]);
+            SoundEffectManager.instance.attemptSound(walkSounds[UnityEngine.Random.Range(0, walkSounds.Length)]);
             walkSoundTimer.restart();
         }
         xVel = rb.velocity.x;
@@ -326,7 +326,7 @@ public class InputHandler : MonoBehaviour
                 }
                 else
                 {
-                    sc.attemptSound(timeManipErrorSound, 5.0f);
+                    SoundEffectManager.instance.attemptSound(timeManipErrorSound, 5.0f);
                     //play error sound, maybe animation
                 }
             }
@@ -347,7 +347,7 @@ public class InputHandler : MonoBehaviour
             {
                 fireDown = true;
             }
-            sc.attemptSound(fireSounds[UnityEngine.Random.Range(0, fireSounds.Length)], 5.0f);
+            SoundEffectManager.instance.attemptSound(fireSounds[UnityEngine.Random.Range(0, fireSounds.Length)], 5.0f);
 
             GameObject snowball = Instantiate(snowballObject);
             snowball.GetComponent<SnowballScript>().setThrower(gameObject);

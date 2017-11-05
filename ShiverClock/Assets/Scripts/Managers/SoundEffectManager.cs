@@ -34,7 +34,7 @@ public class SoundEffectManager : MonoBehaviour
         return default(AudioSource);
     }
 
-    public bool playSoundEffect(AudioClip clip, float pitchRange = 0.0f)
+    public bool attemptSound(AudioClip clip, float pitchRange = 0.0f)
     {
         AudioSource source = findFreeAudioSource();
         if (source != default(AudioSource)) //found available source
