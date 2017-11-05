@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-public class StartGameButton : MonoBehaviour {
+
+public class startOnAnyKey : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -11,10 +11,6 @@ public class StartGameButton : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.anyKey)
-        {
-            SceneManager.LoadScene("Arena1");
-        }
-
-    }
+		
+	}
 }

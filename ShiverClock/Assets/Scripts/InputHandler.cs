@@ -49,7 +49,7 @@ public class InputHandler : MonoBehaviour
     private int maxEnergy = 100;
     private int energy;
     private float displayedEnergy;
-    private int castCost = 10;
+    private int castCost = 5;
     public float invulTime;
     private Timer invulTimer;
     private float timeScaleAdjustment;
@@ -58,7 +58,7 @@ public class InputHandler : MonoBehaviour
     private float localTimeModUpperLimit = 2.0f;
     private float localTimeModLowerLimit = 0.5f;
 
-    private float adjustmentPrTick = 0.25f;
+    private float adjustmentPrTick = 0.50f;
 
     public float snowballCooldown;
     private Timer snowballTimer;
@@ -232,7 +232,7 @@ public class InputHandler : MonoBehaviour
                 //respawn
                 alive = true;
                 cc.isTrigger = false;
-                transform.position = positionOfDeath;
+                transform.position = MyGameManager.instance.getSpawnPos();
                 StartCoroutine(getInvulnerable());
                 rb.velocity = Vector2.zero;
             }            
@@ -336,9 +336,13 @@ public class InputHandler : MonoBehaviour
                 }
                 else if (!Mathf.Approximately(localTimeModifier, localTimeModUpperLimit) && input < 0 && energy >= castCost) //input < 0 IS FLIPPED BECAUSE OF CONTROLLER. REMEMBER THIS
                 {
-                    localTimeModifier += adjustmentPrTick;
-                    timeScaleAdjustment = adjustmentPrTick;
+                    localTimeModifier += adjustmentPrTick*2;
+                    timeScaleAdjustment = adjustmentPrTick*2;
                     modifyEnergy(-castCost);
+                    if (localTimeModifier > localTimeModUpperLimit)
+                    {
+                        localTimeModifier = localTimeModUpperLimit;
+                    }
                 }
                 else
                 {
@@ -406,6 +410,8 @@ public class InputHandler : MonoBehaviour
             fireDown = false;
         }
     }
+
+
     public bool getGrounded()
     {
         return isGrounded;

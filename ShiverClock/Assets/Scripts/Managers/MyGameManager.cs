@@ -16,10 +16,12 @@ public class MyGameManager : MonoBehaviour
     public int numberOfPlayers;
     public GameObject[] sortedEnergyBars;
     public GameObject[] sortedLifeRemainderTexts;
+    public GameObject[] spawnPositions;
     public AnimatorController[] sortedAnimatorControllers;
     public float roundDuration; //time a round takes
     private float remainingTime; //in seconds
     public GameObject HUDClock;
+    
     private void Awake()
     {
         if (instance == null)
@@ -40,9 +42,10 @@ public class MyGameManager : MonoBehaviour
         players = new GameObject[numberOfPlayers];
         Vector3 startPosPlayer1 = new Vector3(0, 0, 0);
         Vector3 posIncrement = new Vector3(2.0f, 0, 0);
+        int spawnPos = Random.Range(0, spawnPositions.Length);
         for (int i = 0; i < numberOfPlayers; i++)
         {
-            players[i] = Instantiate(playerObj, startPosPlayer1 + posIncrement * i, Quaternion.Euler(Vector3.zero));
+            players[i] = Instantiate(playerObj, spawnPositions[(spawnPos + i) % spawnPositions.Length].transform.position, Quaternion.Euler(Vector3.zero));
             players[i].GetComponent<InputHandler>().playerID = (InputHandler.PlayerID)i;
             players[i].GetComponent<InputHandler>().setEnergySlider(sortedEnergyBars[i]);
             players[i].GetComponent<InputHandler>().setLifeCounterText(sortedLifeRemainderTexts[i]);
@@ -64,5 +67,9 @@ public class MyGameManager : MonoBehaviour
     static public GameObject[] getPlayers()
     {
         return players;
+    }
+    public Vector2 getSpawnPos()
+    {
+        return spawnPositions[Random.Range(0, spawnPositions.Length)].transform.position;
     }
 }
