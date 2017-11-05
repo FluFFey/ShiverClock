@@ -9,12 +9,17 @@ public class SnowballScript : MonoBehaviour {
     private float spawntime;
     public Sprite[] snowballVariations;
     GameObject throwerObject;
-
+    private Vector3 startVel;
     private void Awake()
     {
+        startVel = Vector2.zero;
         rb = GetComponent<Rigidbody2D>();
         spawntime = Time.time;
 
+    }
+    public void setStartVel(Vector3 newStartVel)
+    {
+        startVel = newStartVel;
     }
 
     // Use this for initialization
@@ -29,6 +34,7 @@ public class SnowballScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        rb.velocity = startVel * MyGameManager.instance.timeScale;
         if (Time.time - spawntime > lifetime)
         {
             Destroy(gameObject);

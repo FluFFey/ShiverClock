@@ -411,7 +411,7 @@ public class InputHandler : MonoBehaviour
             }
 
             snowball.transform.position = (Vector2)transform.position + finaldirection * 0.75f;
-            snowball.GetComponent<Rigidbody2D>().velocity = snowBallSpeed*finaldirection;
+            snowball.GetComponent<SnowballScript>().setStartVel(snowBallSpeed*finaldirection);
         }
         else
         {
