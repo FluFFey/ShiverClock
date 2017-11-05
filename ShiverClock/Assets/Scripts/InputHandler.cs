@@ -24,7 +24,7 @@ public class InputHandler : MonoBehaviour
 
     private Rigidbody2D rb;
     private float jumpForce = 15.0f;
-    private float maxHorVelocity = 5.0f;
+    private float maxHorVelocity = 15.0f;
 
     private float customGravity = 25.0f;
     private float speed = 3.5f;
