@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class StartGameButton : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+    AudioSource audioSource;
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
