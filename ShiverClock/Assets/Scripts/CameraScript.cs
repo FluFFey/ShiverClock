@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
-    public GameObject target; //target to follow
+    public Vector2 target; //target to follow
+    public float zoom;
     public Vector2 targetOffset;
     public Color fadeColor;
     private Texture2D fadeTexture;
@@ -27,7 +28,7 @@ public class CameraScript : MonoBehaviour
         if (target != null)
         {
             float followSpeed = 1.0f;
-            Vector3 distanceVector = target.transform.position + (new Vector3(targetOffset.x, targetOffset.y, 0)) - transform.position;
+            Vector2 distanceVector = target + new Vector2(targetOffset.x, targetOffset.y) - (Vector2)transform.position;
             float distanceFromTarget = distanceVector.magnitude;
             transform.Translate(new Vector3(distanceVector.x, distanceVector.y, 0) * distanceFromTarget * followSpeed * Time.fixedDeltaTime);
         }

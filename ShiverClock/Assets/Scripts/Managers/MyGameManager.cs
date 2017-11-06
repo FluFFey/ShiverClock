@@ -66,7 +66,14 @@ public class MyGameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Vector2 averagePos = Vector2.zero;
+        foreach(GameObject player in players)
+        {
+            averagePos += (Vector2)player.transform.position;
+        }
+        averagePos /= players.Length;
+        Camera.main.GetComponent<CameraScript>().target = averagePos;
+        float zoom;
         remainingTime -= Time.deltaTime * timeScale;
         int minutes = (int)remainingTime / 60;
         int seconds = (int)(remainingTime % 60);
