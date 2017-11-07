@@ -31,7 +31,7 @@ public class CameraScript : MonoBehaviour
         {
             Vector3 newPos = target;
             float maxZoom = -12;
-            float minZoom = -26;
+            float minZoom = -28;
             newPos.z = zoom;// transform.position.z +(zoom - transform.position.z);
             if (newPos.z > maxZoom)
             {

@@ -44,6 +44,7 @@ public class rotatePlatform : MonoBehaviour {
                 newAngle += rotationTime * Time.fixedDeltaTime;
                 break;
         }
+        rb.AddForce(Vector2.zero);
         rb.MoveRotation(newAngle);
 	}
 }

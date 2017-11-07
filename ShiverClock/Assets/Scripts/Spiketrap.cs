@@ -47,7 +47,7 @@ public class Spiketrap : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if(collider.tag =="Player")
+        if(collider.tag =="Player" && spikeHurts)
         {
             StartCoroutine(collider.GetComponent<InputHandler>().killPlayer());
         }
@@ -64,18 +64,18 @@ public class Spiketrap : MonoBehaviour
         //float oldPos = 0.0f;
         float newPos = 0.0f;
 
-        for (float i = 0; i < spikeTime; i += Time.deltaTime)
+        for (float i = 0; i < spikeTime*0.5f; i += Time.deltaTime)
         {
-            float pd = i / spikeTime; //TODO: ???
-            if (pd > 0.3f)
+            float pd = i / (spikeTime*0.5f); //TODO: ???
+            if (pd > 0.15f)
             {
                 spikeHurts = true;
             }
             newPos = smoothlerp(pd);
-            transform.localPosition = startPos + (direction * newPos * spikeHeight);
+            transform.localPosition = startPos + (direction * newPos * spikeHeight*0.8f);
             yield return null;
         }
-        transform.localPosition = startPos + (direction * spikeHeight);
+        transform.localPosition = startPos + (direction * spikeHeight*0.8f);
         Vector3 endpos = transform.localPosition;
 
         yield return new WaitForSeconds(0.3f);
@@ -87,10 +87,10 @@ public class Spiketrap : MonoBehaviour
             {
                 spikeHurts = false;
             }
-            transform.localPosition = endpos + (-direction * newPos * spikeHeight);
+            transform.localPosition = endpos + (-direction * newPos * spikeHeight*0.8f);
             yield return null;
         }
-        transform.localPosition = endpos+ (-direction * spikeHeight);
+        transform.localPosition = endpos+ (-direction * spikeHeight * 0.8f);
         shootInProgress = false;
     }
 

@@ -56,13 +56,13 @@ public class Icicle : MonoBehaviour {
             StartCoroutine(respawnIcicle());
             
         }
-        if (falling)
-        {
-            //print(modifiedRespawnTime);
-            //modifiedRespawnTime += modifiedRespawnTime * (1.0f / MyGameManager.instance.timeScale) * Time.deltaTime - modifiedRespawnTime*Time.deltaTime; //should work I guess?? note: does not work. don't know 
-            //print(modifiedRespawnTime);
-            respawnTimer.setDuration(modifiedRespawnTime);
-        }
+        //if (falling)
+        //{
+        //    //print(modifiedRespawnTime);
+        //    //modifiedRespawnTime += modifiedRespawnTime * (1.0f / MyGameManager.instance.timeScale) * Time.deltaTime - modifiedRespawnTime*Time.deltaTime; //should work I guess?? note: does not work. don't know 
+        //    //print(modifiedRespawnTime);
+        //    respawnTimer.setDuration(modifiedRespawnTime);
+        //}
         if (!falling)
         {
             foreach (GameObject player in MyGameManager.getPlayers())
@@ -83,14 +83,21 @@ public class Icicle : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        respawnTimer.start();
-        rb.velocity = Vector2.zero;
-        gameObject.GetComponent<SpriteRenderer>().enabled = false; //hacky solution for gamejam
-        gameObject.GetComponent<BoxCollider2D>().enabled = false;
         if (collision.collider.tag == "Player")
         {
             StartCoroutine(collision.collider.GetComponent<InputHandler>().killPlayer());
-        }        
+        }
+        if (falling)
+        {
+            respawnTimer.start();
+            rb.velocity = Vector2.zero;
+            gameObject.GetComponent<SpriteRenderer>().enabled = false; //hacky solution for gamejam
+            gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        }
+        else
+        {
+            fall();
+        }
     }
 
     //void isHit fall();

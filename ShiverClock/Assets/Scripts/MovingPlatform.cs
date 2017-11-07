@@ -39,6 +39,8 @@ public class MovingPlatform : MonoBehaviour
         {
             sinVal += Time.fixedDeltaTime*MyGameManager.instance.timeScale / (moveTime * 9); //not really sure about this
             rb.MovePosition(startPos+ moveDirection * Mathf.Sin(sinVal * Mathf.Rad2Deg) * moveLength);
+            rb.AddForce(Vector2.zero);
         }
+
     }
 }

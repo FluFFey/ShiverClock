@@ -363,13 +363,13 @@ public class InputHandler : MonoBehaviour
             if (adjustTimeDown == false)
             {
                 adjustTimeDown = true;
-                if (currentSpeedModLevel != 0 && input < 0 && energy >= castCost) //input > 0 IS FLIPPED BECAUSE OF CONTROLLER. REMEMBER THIS
+                if (currentSpeedModLevel != 0 && input > 0 && energy >= castCost) //input > 0 IS FLIPPED BECAUSE OF CONTROLLER. REMEMBER THIS
                 {
                     currentSpeedModLevel -= 1;
                     timeScaleAdjustment = speedModLevels[currentSpeedModLevel];
                     modifyEnergy(-castCost);
                 }
-                else if (currentSpeedModLevel != 2 && input > 0 && energy >= castCost) //input < 0 IS FLIPPED BECAUSE OF CONTROLLER. REMEMBER THIS
+                else if (currentSpeedModLevel != 2 && input < 0 && energy >= castCost) //input < 0 IS FLIPPED BECAUSE OF CONTROLLER. REMEMBER THIS
                 {
                     currentSpeedModLevel += 1;
                     timeScaleAdjustment = speedModLevels[currentSpeedModLevel];
@@ -400,8 +400,6 @@ public class InputHandler : MonoBehaviour
             }
             sc.attemptSound(fireSounds[UnityEngine.Random.Range(0, fireSounds.Length)], 5.0f);
 
-            GameObject snowball = Instantiate(snowballObject);
-            snowball.GetComponent<SnowballScript>().setThrower(gameObject);
             Vector2 shootDirection;
             shootDirection.x = Input.GetAxis(shootXAxis);
             shootDirection.y = -Input.GetAxis(shootYAxis);
@@ -424,7 +422,7 @@ public class InputHandler : MonoBehaviour
             {
                 finaldirection.y = -1.0f;
             }
-            if (finaldirection.x ==0 && finaldirection.y == 0)
+            if (finaldirection.x == 0 && finaldirection.y == 0)
             {
                 finaldirection = Vector2.right;
             }
@@ -432,8 +430,11 @@ public class InputHandler : MonoBehaviour
             {
                 finaldirection.Normalize();
             }
-
-            snowball.transform.position = (Vector2)transform.position + finaldirection * 0.75f;
+            Vector3 spawnPos = (Vector2)transform.position + finaldirection * 1.25f;
+            spawnPos.z = 0.0f;
+            GameObject snowball = Instantiate(snowballObject, spawnPos,Quaternion.Euler(Vector3.zero));
+            snowball.GetComponent<SnowballScript>().setThrower(gameObject);
+            
             snowball.GetComponent<SnowballScript>().setStartVel(snowBallSpeed*finaldirection);
         }
         else
