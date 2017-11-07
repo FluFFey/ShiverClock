@@ -67,12 +67,12 @@ public class CameraScript : MonoBehaviour
                 updateEdges(newPos, out botLeftEdge, out topRightEdge, out screenSize);
                 newPos.y = 0 + screenSize.y / 2.0f;
             }
-            if (topRightEdge.y > 29)
-            {
-                newPos.y += (topRightEdge.y - 30) * 0.2f;
-                updateEdges(newPos, out botLeftEdge, out topRightEdge, out screenSize);
-                newPos.y = 29 - screenSize.y / 2.0f;
-            }
+            //if (topRightEdge.y > 29)
+            //{
+            //    newPos.y += (topRightEdge.y - 30) * 0.2f;
+            //    updateEdges(newPos, out botLeftEdge, out topRightEdge, out screenSize);
+            //    newPos.y = 29 - screenSize.y / 2.0f;
+            //}
 
 
             if (newPos.z > maxZoom)

@@ -53,7 +53,7 @@ public class SnowballScript : MonoBehaviour {
        // {
             if (collision.tag == "Player" && (throwerObject != collision.gameObject))
             {
-                collision.gameObject.GetComponent<InputHandler>().getKnockedBack(rb.velocity*1.2f+ Vector2.up*0.5f);
+                collision.gameObject.GetComponent<InputHandler>().getKnockedBack(rb.velocity*1.65f+ Vector2.up*1.5f);
             }
             Destroy(gameObject);
         //}

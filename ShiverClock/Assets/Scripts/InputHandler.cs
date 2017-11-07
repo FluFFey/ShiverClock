@@ -13,7 +13,7 @@ public class InputHandler : MonoBehaviour
         PlayerFour
     }
 
-    float[] speedModLevels = { 0.0f, 1.0f, 4.0f };
+    float[] speedModLevels = { 0.0f, 1.0f, 8.0f };
     int currentSpeedModLevel = 1;
     public PlayerID playerID = 0;
     public int moveSpeed = 1;
