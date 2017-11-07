@@ -391,6 +391,8 @@ MonoBehaviour:
   snowballCooldown: 0.5
   snowballObject: {fileID: 1906807260448528, guid: 0d82173127210ca4bb072ad3476bb3bb,
     type: 2}
+  respawnParticles: {fileID: 1644157564753334, guid: 563b807bb9e4b894f94c6653ed20baad,
+    type: 2}
 --- !u!212 &212618561116428862
 SpriteRenderer:
   m_ObjectHideFlags: 1

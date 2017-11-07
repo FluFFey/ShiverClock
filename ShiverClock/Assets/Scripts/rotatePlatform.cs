@@ -19,7 +19,7 @@ public class rotatePlatform : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
         float newAngle = transform.rotation.eulerAngles.z;
 
@@ -28,20 +28,20 @@ public class rotatePlatform : MonoBehaviour {
             case RotationType.FULL_ROT:
                 if (!Mathf.Approximately(rotationTime, 0))
                 {
-                    newAngle += (Time.deltaTime * MyGameManager.instance.timeScale * 360.0f) / (rotationTime);
+                    newAngle += (Time.fixedDeltaTime * MyGameManager.instance.timeScale * 360.0f) / (rotationTime);
                 }
                 break;
             case RotationType.HALF_ROT:
-                if (!Mathf.Approximately( rotationTime,0))
+                if (!Mathf.Approximately(rotationTime,0))
                 {
-                    sinVal += (Time.deltaTime * MyGameManager.instance.timeScale) / (rotationTime * 9);
+                    sinVal += (Time.fixedDeltaTime * MyGameManager.instance.timeScale) / (rotationTime * 9);
                     newAngle = Mathf.Sin(sinVal * Mathf.Rad2Deg) * 90;
                 }
                 break;
             default:
                 print("no rotType. default to FULL_ROT");
 
-                newAngle += rotationTime * Time.deltaTime;
+                newAngle += rotationTime * Time.fixedDeltaTime;
                 break;
         }
         rb.MoveRotation(newAngle);

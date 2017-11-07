@@ -12,6 +12,9 @@ public class InputHandler : MonoBehaviour
         PlayerThree,
         PlayerFour
     }
+
+    float[] speedModLevels = { 0.0f, 1.0f, 4.0f };
+    int currentSpeedModLevel = 1;
     public PlayerID playerID = 0;
     public int moveSpeed = 1;
     private IEnumerator energyBadCoroutine;
@@ -21,7 +24,8 @@ public class InputHandler : MonoBehaviour
 
     bool alive = true;
     bool disabled = false;
-
+    bool jumpButtonDown = false;
+    
     private Rigidbody2D rb;
     private float jumpForce = 15.0f;
     private float maxHorVelocity = 15.0f;
@@ -51,20 +55,21 @@ public class InputHandler : MonoBehaviour
     private int maxEnergy = 100;
     private int energy;
     private float displayedEnergy;
-    private int castCost = 5;
+    private int castCost = 20;
     public float invulTime;
     private Timer invulTimer;
     private float timeScaleAdjustment;
     
     private float localTimeModifier = 1.0f;
-    private float localTimeModUpperLimit = 2.0f;
-    private float localTimeModLowerLimit = 0.5f;
+    //private float localTimeModUpperLimit = 2.0f;
+    //private float localTimeModLowerLimit = 0.5f;
 
-    private float adjustmentPrTick = 0.50f;
+    //private float adjustmentPrTick = 0.50f;
 
     public float snowballCooldown;
     private Timer snowballTimer;
     public GameObject snowballObject;
+    public GameObject respawnParticles;
 
     private void Awake()
     {
@@ -124,13 +129,14 @@ public class InputHandler : MonoBehaviour
             {
                 if (Mathf.Approximately(Input.GetAxisRaw(adjustTimeInput), 1))
                 {
-                    fireDown = true;
-                    localTimeModifier += adjustmentPrTick;
-                    timeScaleAdjustment = adjustmentPrTick;
+                    //fireDown = true;
+                    currentSpeedModLevel += 1;
                 }
             }
-            MyGameManager.instance.timeScale += timeScaleAdjustment;
-            timeScaleAdjustment = 0.0f; //if it's stupid but it works, it's still stupid but it works for gamejam
+            timeScaleAdjustment = speedModLevels[currentSpeedModLevel];
+//            print(timeScaleAdjustment);
+            MyGameManager.instance.timeScalePrPlayer[(int)playerID]= timeScaleAdjustment;
+            //timeScaleAdjustment = 0.0f; //if it's stupid but it works, it's still stupid but it works for gamejam
         }
     }
 
@@ -140,10 +146,18 @@ public class InputHandler : MonoBehaviour
         {
             handleVelocity(Input.GetAxisRaw(horizontalInput));
             checkGroundCollision();
-            if (Mathf.Approximately(Input.GetAxisRaw(jumpInput), 1) && isGrounded)
+            if (!jumpButtonDown)
             {
-                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-                isJumping = true;
+                if (Mathf.Approximately(Input.GetAxisRaw(jumpInput), 1) && isGrounded)
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                    isJumping = true;
+                    jumpButtonDown = true;
+                }
+            }
+            if (Mathf.Approximately(Input.GetAxisRaw(jumpInput), 0))
+            {
+                jumpButtonDown = false;
             }
             applyGravity();
             handleFireing(Mathf.Approximately(Input.GetAxisRaw(fireInput), 1));
@@ -238,6 +252,8 @@ public class InputHandler : MonoBehaviour
                 cc.isTrigger = false;
 
                 transform.position = MyGameManager.instance.getSpawnPos();
+                ;
+                Destroy(Instantiate(respawnParticles,transform), 1.0f); 
                 StartCoroutine(getInvulnerable());
                 rb.velocity = Vector2.zero;
             }
@@ -261,6 +277,10 @@ public class InputHandler : MonoBehaviour
     public void modifyEnergy(int value)
     {
         energy += value;
+        if (energy > maxEnergy)
+        {
+            energy = maxEnergy;
+        }
         if (energyBadCoroutine != null)
         {
             StopCoroutine(energyBadCoroutine);
@@ -291,7 +311,7 @@ public class InputHandler : MonoBehaviour
         Vector2 size = transform.lossyScale;
         size.y *= 0.05f;
         size.x *= 0.98f;
-        RaycastHit2D boxHit = Physics2D.BoxCast(origin, size, 0, Vector2.down, 0.1f);
+        RaycastHit2D boxHit = Physics2D.BoxCast(origin, size, 0, Vector2.down, 0.2f);
         if (boxHit && (rb.velocity.y < 0 || Mathf.Approximately(rb.velocity.y, 0.0f))) //dunno if approx check is needed, but just to be safe for the jam
         {
             isGrounded = true;
@@ -338,28 +358,22 @@ public class InputHandler : MonoBehaviour
 
     private void handleTimeModifications(float input)
     {
-
         if (input > 0.5f || input < -0.5f)
         {
             if (adjustTimeDown == false)
             {
                 adjustTimeDown = true;
-                if (!Mathf.Approximately(localTimeModifier, localTimeModLowerLimit) && input > 0 && energy >= castCost) //input > 0 IS FLIPPED BECAUSE OF CONTROLLER. REMEMBER THIS
+                if (currentSpeedModLevel != 0 && input < 0 && energy >= castCost) //input > 0 IS FLIPPED BECAUSE OF CONTROLLER. REMEMBER THIS
                 {
-
-                    localTimeModifier -= adjustmentPrTick;
-                    timeScaleAdjustment = -adjustmentPrTick;
+                    currentSpeedModLevel -= 1;
+                    timeScaleAdjustment = speedModLevels[currentSpeedModLevel];
                     modifyEnergy(-castCost);
                 }
-                else if (!Mathf.Approximately(localTimeModifier, localTimeModUpperLimit) && input < 0 && energy >= castCost) //input < 0 IS FLIPPED BECAUSE OF CONTROLLER. REMEMBER THIS
+                else if (currentSpeedModLevel != 2 && input > 0 && energy >= castCost) //input < 0 IS FLIPPED BECAUSE OF CONTROLLER. REMEMBER THIS
                 {
-                    localTimeModifier += adjustmentPrTick*2;
-                    timeScaleAdjustment = adjustmentPrTick*2;
+                    currentSpeedModLevel += 1;
+                    timeScaleAdjustment = speedModLevels[currentSpeedModLevel];
                     modifyEnergy(-castCost);
-                    if (localTimeModifier > localTimeModUpperLimit)
-                    {
-                        localTimeModifier = localTimeModUpperLimit;
-                    }
                 }
                 else
                 {

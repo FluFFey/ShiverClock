@@ -28,7 +28,7 @@ InputManager:
     negativeButton: 
     positiveButton: joystick 1 button 5
     altNegativeButton: 
-    altPositiveButton: 
+    altPositiveButton: '[3]'
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
@@ -41,11 +41,11 @@ InputManager:
     m_Name: AdjustTimeOne
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
+    negativeButton: '[1]'
+    positiveButton: '[2]'
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 0
+    gravity: 1000
     dead: 0.001
     sensitivity: 1000
     snap: 1
@@ -58,7 +58,7 @@ InputManager:
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 0
+    positiveButton: '[0]'
     altNegativeButton: 
     altPositiveButton: joystick 1 button 0
     gravity: 0
@@ -157,7 +157,7 @@ InputManager:
     positiveButton: e
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 0
+    gravity: 1000
     dead: 0.001
     sensitivity: 1000
     snap: 1

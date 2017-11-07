@@ -44,7 +44,7 @@ public class Icicle : MonoBehaviour {
         }
         respawnTimer.restart();
         respawnTimer.stop();
-        gameObject.GetComponent<MeshRenderer>().enabled = true;
+        gameObject.GetComponent<SpriteRenderer>().enabled = true;
         gameObject.GetComponent<BoxCollider2D>().enabled = true;
         transform.position = spawnPos;
     }
@@ -85,7 +85,7 @@ public class Icicle : MonoBehaviour {
     {
         respawnTimer.start();
         rb.velocity = Vector2.zero;
-        gameObject.GetComponent<MeshRenderer>().enabled = false; //hacky solution for gamejam
+        gameObject.GetComponent<SpriteRenderer>().enabled = false; //hacky solution for gamejam
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
         if (collision.collider.tag == "Player")
         {
